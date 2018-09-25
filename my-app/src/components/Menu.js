@@ -1,9 +1,28 @@
 import React, { Component } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, NavLink, Switch} from 'react-router-dom';
-import Home from "./components/Home";
-import About from "./components/About";
-import NotFound from "./components/NotFound";
+import { Route, Link} from 'react-router-dom';
+
+const menus = [
+	{
+		label: "Home",
+		to: "/",
+		exact: true
+	},
+	{
+		label: "Product List",
+		to: "/products",
+		exact: false
+	},
+	{
+		label: "About",
+		to: "/about",
+		exact: false
+	},
+	{
+		label: "Login",
+		to: "/login",
+		exact: false
+	}
+]
 
 const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
 	return (
@@ -11,7 +30,7 @@ const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
 			var active  = match ? 'active xyz' : '';
 			return (
 				<li className={ active }>
-					<NavLink exact to={to}>{ label }</NavLink>
+					<Link exact to={to}>{ label }</Link>
 				</li>
 			)
 		}}/>
@@ -19,17 +38,25 @@ const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
 }
 
 class Menu extends Component {	
-  render() {
-    return (
-		<Router>				
-            <nav className="navbar navbar-inverse">
-					<ul className="nav navbar-nav">					
-						<MenuLink label="Home" to="/" activeOnlyWhenExact={true}/>
-						<MenuLink label="About" to="/about" activeOnlyWhenExact={false}/>					
-					</ul>
+	showMenu = (menus) => {
+		var result = null;
+		if(menus.length > 0) {
+			result = menus.map((menu,index)=>{
+				return (
+					<MenuLink key = {index} label={menu.label} to={menu.to} activeOnlyWhenExact={menu.exact}/>	
+				)
+			})
+		}
+		return result;
+	}
+  	render() {
+		return (		
+			<nav className="navbar navbar-inverse">
+				<ul className="nav navbar-nav">		
+					{this.showMenu(menus)}			
+				</ul>
 			</nav>
-		</Router>	
-    );
+		);
   }
 }
 

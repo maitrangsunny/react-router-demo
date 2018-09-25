@@ -1,38 +1,31 @@
 import React, { Component } from 'react';
-import './App.css';
-import { BrowserRouter as Router, Route, NavLink, Switch} from 'react-router-dom';
-import Home from "./components/Home";
-import About from "./components/About";
-import NotFound from "./components/NotFound";
-
-const MenuLink = ({ label, to, activeOnlyWhenExact }) => {
-	return (
-		<Route path ={to} exact = { activeOnlyWhenExact } children = {({ match})=>{
-			var active  = match ? 'active xyz' : '';
-			return (
-				<li className={ active }>
-					<NavLink exact to={to}>{ label }</NavLink>
-				</li>
-			)
-		}}/>
-	)
-}
+import { BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import Menu from './components/Menu';
+import routers from './Routers';
 
 class App extends Component {	
-  render() {
-    return (
-		<Router>
-			<div className="App">					
-				
-				<Switch>
-					<Route path="/" exact component = { Home }/>
-					<Route path='/about' component = { About }/>
-					<Route component = { NotFound }/>
-				</Switch>
-			</div>	
-		</Router>	
-    );
-  }
+  	render() {
+		return (
+			<Router>
+				<div className="App">		
+					<Menu/>					
+					<Switch>
+						{this.showContentMenu(routers)}
+					</Switch>
+				</div>	
+			</Router>	
+		);
+	  }
+	  	showContentMenu = (route) => {
+			var result = null;
+			if(route.length > 0) {
+				result = route.map((item, index)=>{
+					return (
+						<Route key= {index} path={item.path} exact={item.exact} component = { item.main }/>
+					)
+				})
+			}
+			return result; 
+	  }
 }
-
 export default App;
